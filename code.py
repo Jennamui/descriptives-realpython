@@ -4,6 +4,13 @@ import statistics
 import numpy as np
 import scipy.stats
 import pandas as pd
+import matplotlib.pyplot as plt
+
+##Use Python’s statistics for the most important Python statistics functions.
+##Use NumPy to handle arrays efficiently.
+##Use SciPy for additional Python statistics routines for NumPy arrays.
+##Use Pandas to work with labeled datasets.
+##Use Matplotlib to visualize data with plots, charts, and histograms.
 
 #create data
 x = [8, 1, 2.5, 4, 28]
@@ -182,3 +189,109 @@ r = x__.corr(y__)
 r = x__.corr(x__)
 
 ##2D Data
+#Axes
+a = np.array([[1, 1, 1],
+               [2, 3, 1],
+               [4, 9, 2],
+               [8, 27, 4],
+               [16, 1, 1]])
+np.mean(a)
+a.mean()
+np.median(a)
+a.var(ddof=1)
+np.mean(a, axis=0)
+np.mean(a, axis=1)
+scipy.stats.gmean(a)
+scipy.stats.gmean(a, axis=1)
+scipy.stats.gmean(a, axis=None)
+scipy.stats.describe(a, axis=None, ddof=1, bias=False)
+
+#Dataframes
+row_names = ['first', 'second', 'third', 'fourth', 'fifth']
+col_names = ['A', 'B', 'C']
+df = pd.DataFrame(a, index=row_names, columns=col_names)
+
+df.mean()
+df.var()
+df.mean(axis=1)
+df.var(axis=1)
+df['A']
+df['A'].mean()
+df.values
+df.describe()
+
+##Visualizing Data
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+
+#Box plots
+np.random.seed(seed=0)
+x = np.random.randn(1000)
+y = np.random.randn(100)
+z = np.random.randn(10)
+
+fig, ax = plt.subplots()
+ax.boxplot((x, y, z), vert=False, showmeans=True, meanline=True,
+           labels=('x', 'y', 'z'), patch_artist=True,
+           medianprops={'linewidth': 2, 'color': 'purple'},
+           meanprops={'linewidth': 2, 'color': 'red'})
+plt.show()
+
+#Histograms
+hist, bin_edges = np.histogram(x, bins=10)
+
+fig, ax = plt.subplots()
+ax.hist(x, bin_edges, cumulative=False)
+ax.set_xlabel('x')
+ax.set_ylabel('Frequency')
+plt.show()
+
+fig, ax = plt.subplots()
+ax.hist(x, bin_edges, cumulative=True)
+ax.set_xlabel('x')
+ax.set_ylabel('Frequency')
+plt.show()
+
+#Pie charts
+x, y, z = 128, 256, 1024
+fig, ax = plt.subplots()
+ax.pie((x, y, z), labels=('x', 'y', 'z'), autopct='%1.1f%%')
+plt.show()
+
+#Bar charts
+x = np.arange(21)
+y = np.random.randint(21, size=21)
+err = np.random.randn(21)
+
+fig, ax = plt.subplots()
+ax.bar(x, y, yerr=err)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.show()
+
+#X-Y Plots
+x = np.arange(21)
+y = 5 + 2 * x + 2 * np.random.randn(21)
+slope, intercept, r, *__ = scipy.stats.linregress(x, y)
+line = f'Regression line: y={intercept:.2f}+{slope:.2f}x, r={r:.2f}'
+
+fig, ax = plt.subplots()
+ax.plot(x, y, linewidth=0, marker='s', label='Data points')
+ax.plot(x, intercept + slope * x, label=line)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.legend(facecolor='white')
+plt.show()
+
+#heatmaps
+matrix = np.cov(x, y).round(decimals=2)
+fig, ax = plt.subplots()
+ax.imshow(matrix)
+ax.grid(False)
+ax.xaxis.set(ticks=(0, 1), ticklabels=('x', 'y'))
+ax.yaxis.set(ticks=(0, 1), ticklabels=('x', 'y'))
+ax.set_ylim(1.5, -0.5)
+for i in range(2):
+    for j in range(2):
+        ax.text(j, i, matrix[i, j], ha='center', va='center', color='w')
+plt.show()
